@@ -13,7 +13,7 @@ capabilities:
   - type: com.docker.sandbox/lifecycle@1
     config:
       install:
-        - description: Installing shell improvements
+        - description: Install shell improvements
           user: agent
           command: |
             set -exo pipefail
@@ -25,7 +25,40 @@ capabilities:
             if ${{ kit.args.bash_prompt_pwd_basename }}; then
               sed -i -E 's/^([[:space:]]*)PS1=(.*)$/\1PS1=\2\n\1__install_pwd_basename_prompt/' ~/.bashrc
             fi
+        - description: Install GNU Nano improvements
+          user: "0"
+          command: |
+            set -eo pipefail
 
-            sudo sed -i 's|^# set autoindent$|set autoindent|' /etc/nanorc
-            sudo sed -i 's|^# set linenumbers$|set linenumbers|' /etc/nanorc
-            sudo sed -i 's|^# set softwrap$|set softwrap|' /etc/nanorc
+            set_option()
+            {
+              local OPTION="$1"
+              echo "--> Setting $OPTION"
+              if grep -qE "^# set ${OPTION}\$" /etc/nanorc; then
+                sed -i "s|^# set ${OPTION}\$|set $OPTION|" /etc/nanorc
+              else
+                echo "set $OPTION" >> /etc/nanorc
+              fi
+            }
+
+            # Navigation and editing
+            set_option autoindent
+            set_option linenumbers
+            set_option smarthome
+
+            # Wrapping
+            set_option softwrap
+            set_option atblanks
+
+            # Interface
+            set_option minibar
+            set_option constantshow
+            set_option indicator
+
+            # Convenience
+            set_option historylog
+            set_option positionlog
+
+            # Tabs
+            echo "--> Setting tabsize 4"
+            echo "set tabsize 4" >> /etc/nanorc
