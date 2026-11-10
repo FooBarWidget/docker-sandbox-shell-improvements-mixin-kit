@@ -1,0 +1,31 @@
+# syntax=docker/sandbox-kit:3
+schemaVersion: "3"
+kind: mixin
+
+displayName: Base kit shell improvements
+
+args:
+  bash_prompt_pwd_basename:
+    default: "false"
+    pattern: "^(true|false)$"
+
+capabilities:
+  - type: com.docker.sandbox/lifecycle@1
+    config:
+      install:
+        - description: Installing shell improvements
+          user: agent
+          command: |
+            set -exo pipefail
+
+            echo '. /usr/local/share/shell-improvement/git-prompt.sh' | sudo tee -a /etc/bash.bashrc
+            echo '. /usr/local/share/shell-improvement/pwd-basename-prompt.sh' | sudo tee -a /etc/bash.bashrc
+            echo '. /usr/local/share/shell-improvement/bashrc.sh' | sudo tee -a /etc/bash.bashrc
+            sed -i -E 's/^([[:space:]]*)PS1=(.*)$/\1PS1=\2\n\1__install_git_prompt/' ~/.bashrc
+            if ${{ kit.args.bash_prompt_pwd_basename }}; then
+              sed -i -E 's/^([[:space:]]*)PS1=(.*)$/\1PS1=\2\n\1__install_pwd_basename_prompt/' ~/.bashrc
+            fi
+
+            sudo sed -i 's|^# set autoindent$|set autoindent|' /etc/nanorc
+            sudo sed -i 's|^# set linenumbers$|set linenumbers|' /etc/nanorc
+            sudo sed -i 's|^# set softwrap$|set softwrap|' /etc/nanorc
