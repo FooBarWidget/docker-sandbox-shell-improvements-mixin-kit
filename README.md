@@ -17,11 +17,18 @@ Many [official Docker Sandbox base kits (v3)](https://docs.docker.com/ai/sandbox
 
 ## Usage
 
-In your `sbxenv.yaml`:
+Add me to your Docker Sandbox allowed sources, like this:
+
+```bash
+sbx settings set kit.allowedSources '["docker.io/","dhi.io/","github.com/FooBarWidget/"]'
+```
+
+Then in your `sbxenv.yaml`:
 
 ```yaml
 kits:
-  - source: git+https://github.com/FooBarWidget/docker-sandbox-shell-improvements-mixin-kit.git
+  # Replace 'v1.0.0' with the latest Git tag
+  - source: "git+https://github.com/FooBarWidget/docker-sandbox-shell-improvements-mixin-kit.git#ref=v1.0.0"
     args:
       bash_prompt_pwd_basename: "true" # default: "false"
 ```
