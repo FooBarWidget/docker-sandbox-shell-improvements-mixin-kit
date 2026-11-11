@@ -28,7 +28,7 @@ Then in your `sbxenv.yaml`:
 ```yaml
 kits:
   # Replace 'v1.0.0' with the latest Git tag
-  - source: "git+https://github.com/FooBarWidget/docker-sandbox-shell-improvements-mixin-kit.git#ref=v1.0.0"
+  - source: "git+https://github.com/FooBarWidget/docker-sandbox-shell-improvements-mixin-kit.git#ref=v1.0.1"
     args:
       bash_prompt_pwd_basename: "true" # default: "false"
 ```
