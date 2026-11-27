@@ -18,13 +18,19 @@ capabilities:
           command: |
             set -exo pipefail
 
-            echo '. /usr/local/share/shell-improvement/git-prompt.sh' | sudo tee -a /etc/bash.bashrc
-            echo '. /usr/local/share/shell-improvement/pwd-basename-prompt.sh' | sudo tee -a /etc/bash.bashrc
-            echo '. /usr/local/share/shell-improvement/bashrc.sh' | sudo tee -a /etc/bash.bashrc
+            sudo usermod -s /bin/bash root
+            sudo usermod -s /bin/bash agent
+
+            echo '. /usr/local/share/shell-improvements/git-prompt.sh' | sudo tee -a /etc/bash.bashrc
+            echo '. /usr/local/share/shell-improvements/pwd-basename-prompt.sh' | sudo tee -a /etc/bash.bashrc
+            echo '. /usr/local/share/shell-improvements/bashrc.sh' | sudo tee -a /etc/bash.bashrc
             sed -i -E 's/^([[:space:]]*)PS1=(.*)$/\1PS1=\2\n\1__install_git_prompt/' ~/.bashrc
             if ${{ kit.args.bash_prompt_pwd_basename }}; then
               sed -i -E 's/^([[:space:]]*)PS1=(.*)$/\1PS1=\2\n\1__install_pwd_basename_prompt/' ~/.bashrc
             fi
+
+            sudo ln -s /usr/local/share/shell-improvements/htoprc /etc/htoprc
+
         - description: Install GNU Nano improvements
           user: "0"
           command: |

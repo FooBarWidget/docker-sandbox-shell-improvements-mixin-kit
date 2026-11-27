@@ -1,6 +1,6 @@
 FROM scratch
 
-COPY resources/ /usr/local/share/shell-improvement/
+COPY resources/ /usr/local/share/shell-improvements/
 
 ENV EDITOR=nano
 
